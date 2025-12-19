@@ -50,8 +50,7 @@ The automation covers the following Admin module functionalities:
 ### **How to Run Tests**
 
 Option 1: Open Cypress Test Runner (Interactive Mode)
-
-     ```console 
+    ```console 
       npx cypress open
     ```
     - Select E2E Testing
@@ -59,8 +58,7 @@ Option 1: Open Cypress Test Runner (Interactive Mode)
     - Click on admin-user.cy.js
 
 Option 2: Run Tests Headlessly (Terminal Mode)
-
-     ```console 
+    ```console 
       npx cypress run
     ```
     - All tests will execute in the terminal without opening a browser
