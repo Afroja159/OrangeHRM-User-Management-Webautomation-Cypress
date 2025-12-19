@@ -50,6 +50,7 @@ The automation covers the following Admin module functionalities:
 ### **How to Run Tests**
 
 Option 1: Open Cypress Test Runner (Interactive Mode)
+
      ```console 
       npx cypress open
     ```
@@ -58,6 +59,7 @@ Option 1: Open Cypress Test Runner (Interactive Mode)
     - Click on admin-user.cy.js
 
 Option 2: Run Tests Headlessly (Terminal Mode)
+
      ```console 
       npx cypress run
     ```
