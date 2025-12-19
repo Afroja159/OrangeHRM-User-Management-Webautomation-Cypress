@@ -66,9 +66,7 @@ Option 2: Run Tests Headlessly (Terminal Mode)
 
 ## **Cypress Version Used**
 
-    ```console 
       Cypress: 15.7.1
-    ```
 
 ## Test Execution Flow:
 
