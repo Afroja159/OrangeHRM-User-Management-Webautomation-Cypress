@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/24253991/README.md)
 ### **OrangeHRM Automation with Cypress**
 This project contains end-to-end automation tests for the Admin → User Management module of the OrangeHRM demo application using Cypress. 
 
