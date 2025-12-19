@@ -9,6 +9,19 @@ class AdminPage {
     );
   }
 
+  goToUserList() {
+
+    // Click on "Admin" menu to go back to System Users page
+
+    cy.xpath("//span[text()='Admin']")
+      .should('be.visible')
+      .click();
+
+    // Verify the page URL
+    cy.url().should('include', '/admin/viewSystemUsers');
+  }
+
+
   clickAddButton() {
     cy.xpath("//i[@class='oxd-icon bi-plus oxd-button-icon']")
       .should('be.visible')
@@ -32,15 +45,17 @@ class AdminPage {
       .click();
   }
 
-  //   Employee Search and Select
+  // Employee Search and Select (Dynamic)
 
-  selectFirstEmployeeFromSearch(searchText = 'Jo') {
+  selectFirstEmployeeFromSearch(employeeName) {
+    if (!employeeName) throw new Error('Employee name is required for search');
+
     cy.intercept('GET', '**/pim/employees**').as('getEmployees');
 
     cy.xpath("//input[@placeholder='Type for hints...']")
       .should('be.visible')
       .clear()
-      .type(searchText);
+      .type(employeeName);
 
     cy.wait('@getEmployees');
 
@@ -52,7 +67,7 @@ class AdminPage {
 
     cy.xpath("//input[@placeholder='Type for hints...']")
       .invoke('val')
-      .should('not.be.empty');
+      .should('contain', employeeName.split(' ')[0]); // partial match check
   }
 
   //   Status Dropdown
@@ -103,31 +118,40 @@ class AdminPage {
 
   //   Step 5: Search the Created User
 
-  searchByUsername(username) {
-    // Wait for user list to load
-    cy.intercept('GET', '**/admin/users**').as('getUsers');
-    cy.wait('@getUsers');
+   searchByUsername(username) {
+     // Make sure Admin page is fully loaded
+     cy.url().should('include', '/admin/viewSystemUsers');
 
-    // Type in username input
-    cy.get('form')
-      .find('input.oxd-input')
-      .first()
+     // Find Username input by label (robust selector)
+     cy.contains('label', 'Username')
+       .parents('.oxd-input-group')
+       .find('input')
+       .should('be.visible')
+       .clear()
+       .type(username);
+
+     // Click Search
+
+     cy.contains('button', 'Search')
+       .should('be.enabled')
+       .click();
+
+     // Assert result appears (implicit retry)
+
+     cy.contains('.oxd-table-row', username, { timeout: 10000 })
+       .should('be.visible');
+   }
+
+   // Verify
+
+  verifyUserInSearchResult(username, role, status) {
+    cy.contains('.oxd-table-row', username, { timeout: 10000 })
       .should('be.visible')
-      .then(($input) => {
-        cy.wrap($input).clear({ force: true }).type(username, { force: true });
+      .within(() => {
+        cy.contains(username).should('exist');
+        cy.contains(role).should('exist');
+        cy.contains(status).should('exist');
       });
-
-    // Click Search button
-    cy.contains('button', 'Search')
-      .should('be.enabled')
-      .click({ force: true });
-
-    // Wait for search API to finish
-    cy.intercept('GET', '**/admin/users**').as('searchUsers');
-    cy.wait('@searchUsers');
-
-    // Verify result appears
-    cy.contains('.oxd-table-cell', username, { timeout: 10000 }).should('be.visible');
   }
 
 }

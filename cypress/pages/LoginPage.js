@@ -1,36 +1,33 @@
 class LoginPage {
 
   visitLoginPage() {
-    cy.visit('/');
-    cy.url().should(
-      'eq',
-      Cypress.env('baseUrl') + '/web/index.php/auth/login'
-    );
+    cy.visit(Cypress.env('baseUrl') + '/web/index.php/auth/login');
+
+    cy.xpath("//input[@placeholder='Username']", { timeout: 10000 })
+      .should('be.visible');
   }
 
   enterUsername(username) {
     cy.xpath("//input[@placeholder='Username']")
-      .should('be.visible')
+      .clear()
       .type(username);
   }
 
   enterPassword(password) {
     cy.xpath("//input[@placeholder='Password']")
-      .should('be.visible')
+      .clear()
       .type(password);
   }
 
   clickLoginButton() {
     cy.xpath("//button[normalize-space()='Login']")
-      .should('be.visible')
+      .should('be.enabled')
       .click();
   }
 
   verifySuccessfulLogin() {
-    cy.url().should(
-      'eq',
-      'https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index'
-    );
+    cy.url({ timeout: 10000 })
+      .should('include', '/dashboard/index');
   }
 }
 
