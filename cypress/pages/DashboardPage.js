@@ -9,7 +9,7 @@ class DashboardPage {
   verifyAdminPageOpened() {
     cy.url().should(
       'eq',
-      'https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewSystemUsers'
+      Cypress.env('baseUrl') + '/web/index.php/admin/viewSystemUsers'
     );
   }
 }
